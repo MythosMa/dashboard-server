@@ -11,22 +11,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fc.v2.common.conf.oss.OssTemplate;
 import com.fc.v2.common.domain.AjaxResult;
+import com.fc.v2.common.log.Log;
 import com.fc.v2.controller.AdminController;
 import com.fc.v2.mapper.custom.TsysUserDao;
 import com.fc.v2.model.auto.TsysUser;
 import com.fc.v2.satoken.SaTokenUtil;
+import com.fc.v2.service.SysUserService;
 import com.fc.v2.util.ServletUtils;
 import com.fc.v2.util.StringUtils;
+
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api/goview")
+@RequestMapping("/api/goview/sys")
 public class GoViewController {
 
 	private static Logger logger = LoggerFactory.getLogger(AdminController.class);
@@ -34,6 +39,11 @@ public class GoViewController {
 	private TsysUserDao tsysUserDao;
 	@Autowired
 	private  OssTemplate template;
+	
+	//系统用户
+	@Autowired
+	public SysUserService sysUserService; 
+		
 	/**
 	 * 手机登录
 	 * @param user
@@ -93,6 +103,31 @@ public class GoViewController {
 		}
 
 	}
+	
+	/**
+	 * 注册
+	 * @Title: register
+	 * @author fuce
+	 * @date 2022年5月19日
+	 * @param  参数
+	 * @return void 返回类型
+	 * @throws
+	 */
+	@PostMapping("/register")
+	@ResponseBody
+	public AjaxResult register(@RequestBody TsysUser tsysUser) {
+		int b=sysUserService.insertUserRoles(tsysUser,"687205030654251008");
+		if(b>0){
+			return AjaxResult.success("注册成功");
+		}else{
+			return AjaxResult.error("注册失败");
+		}
+	}
+	
+	
+	
+	
+	
 	
 	/**
 	 * 退出登陆
