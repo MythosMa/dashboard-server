@@ -59,15 +59,26 @@ public class ResultTable {
     public static ResultTable pageTable(long count,Object data){
         ResultTable resultTable = new ResultTable();
         resultTable.setData(data);
-        resultTable.setCode(0);
+        resultTable.setCode(200);
         resultTable.setCount(count);
+        if(data!=null) {
+       	 resultTable.setMsg("获取成功");
+       }else {
+       	 resultTable.setMsg("获取失败");
+       }
         return resultTable;
     }
 
     public static ResultTable dataTable(Object data){
         ResultTable resultTable = new ResultTable();
         resultTable.setData(data);
-        resultTable.setCode(0);
+        resultTable.setCode(200);
+        if(data!=null) {
+        	 resultTable.setMsg("获取成功");
+        }else {
+        	 resultTable.setMsg("获取失败");
+        }
+       
         return resultTable;
     }
 }

@@ -4,7 +4,9 @@ import com.fc.v2.common.base.BaseController;
 import com.fc.v2.common.domain.AjaxResult;
 import com.fc.v2.common.domain.ResultTable;
 import com.fc.v2.model.auto.GoviewProject;
+import com.fc.v2.model.auto.GoviewProjectData;
 import com.fc.v2.model.custom.Tablepar;
+import com.fc.v2.service.GoviewProjectDataService;
 import com.fc.v2.service.GoviewProjectService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -12,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -22,12 +25,14 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(value = "前端项目表")
 @Controller
-@RequestMapping("/api/GoviewProject")
+@RequestMapping("/api/goview/project")
 public class GoviewProjectAPi extends BaseController{
 	
 	
 	@Autowired
 	private GoviewProjectService goviewProjectService;
+	@Autowired
+	private GoviewProjectDataService goviewProjectDataService;
 	
 	
 	
@@ -55,7 +60,7 @@ public class GoviewProjectAPi extends BaseController{
      */
 	//@Log(title = "项目表新增", action = "111")
 	@ApiOperation(value = "新增", notes = "新增")
-	@PostMapping("/add")
+	@PostMapping("/create")
 	@SaCheckPermission("gen:goviewProject:add")
 	@ResponseBody
 	public AjaxResult add(@RequestBody GoviewProject goviewProject){
@@ -74,7 +79,7 @@ public class GoviewProjectAPi extends BaseController{
 	 */
 	//@Log(title = "项目表删除", action = "111")
 	@ApiOperation(value = "删除", notes = "删除")
-	@DeleteMapping("/remove")
+	@DeleteMapping("/delete")
 	@SaCheckPermission("gen:goviewProject:remove")
 	@ResponseBody
 	public AjaxResult remove(String ids){
@@ -101,13 +106,32 @@ public class GoviewProjectAPi extends BaseController{
         return toAjax(goviewProjectService.updateByPrimaryKeySelective(goviewProject));
     }
     
-    
-    /**
-	 * 修改状态
-	 * @param record
-	 * @return
+	
+	/**
+	 * 项目重命名
+	 * @author fuce
+	 * @date 2022年5月20日
+	 * @param @param goviewProject
+	 * @param @return 参数
+	 * @return AjaxResult 返回类型
+	 * @throws
 	 */
-    @PutMapping("/updateVisible")
+    //@Log(title = "项目表修改", action = "111")
+	@ApiOperation(value = "项目重命名", notes = "项目重命名")
+    @SaCheckPermission("gen:goviewProject:edit")
+    @PostMapping("/rename")
+    @ResponseBody
+    public AjaxResult rename(@RequestBody GoviewProject goviewProject)
+    {
+		GoviewProject goviewProject2=new GoviewProject();
+    	goviewProject2.setId(goviewProject.getId());
+    	goviewProject2.setProjectName(goviewProject.getProjectName());
+        return toAjax(goviewProjectService.updateByPrimaryKeySelective(goviewProject2));
+    }
+
+	
+    //发布/取消项目状态
+    @PutMapping("/publish")
 	@ResponseBody
     public AjaxResult updateVisible(@RequestBody GoviewProject goviewProject){
     	if(goviewProject.getState()==-1||goviewProject.getState()==1) {
@@ -118,8 +142,27 @@ public class GoviewProjectAPi extends BaseController{
     		return toAjax(i);
     	}
     	return error("警告非法字段");
-		
 	}
+    
+    
+    /**
+	 * 获取项目存储数据
+	 * @param id 项目id
+	 * @param mmap
+	 * @return
+	 */
+	@ApiOperation(value = "获取项目存储数据", notes = "获取项目存储数据")
+	@GetMapping("/getData/{id}")
+	@ResponseBody
+    public AjaxResult getData(@PathVariable("id") String id, ModelMap map)
+    {
+		GoviewProjectData blogText=goviewProjectDataService.selectByPrimaryKey(id);
+		if(blogText!=null) {
+			return AjaxResult.successData(200, blogText.getDataToStr()).put("msg","获取成功");
+		}
+		return AjaxResult.error("获取失败");
+        
+    }
 
     
     
