@@ -1,6 +1,7 @@
 package com.fc.v2.controller.admin.goview;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import com.fc.v2.common.log.Log;
 import com.fc.v2.controller.AdminController;
 import com.fc.v2.mapper.custom.TsysUserDao;
 import com.fc.v2.model.auto.TsysUser;
+import com.fc.v2.model.auto.TsysUserExample;
 import com.fc.v2.satoken.SaTokenUtil;
 import com.fc.v2.service.SysUserService;
 import com.fc.v2.util.ServletUtils;
@@ -28,6 +30,7 @@ import com.fc.v2.util.StringUtils;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -116,6 +119,12 @@ public class GoViewController {
 	@PostMapping("/register")
 	@ResponseBody
 	public AjaxResult register(@RequestBody TsysUser tsysUser) {
+		TsysUserExample example=new TsysUserExample();
+		example.createCriteria().andUsernameEqualTo(tsysUser.getUsername());
+		List<TsysUser> list = sysUserService.selectByExample(example);
+		if(list.size()>0) {
+			return AjaxResult.success("用户名重复");
+		}
 		int b=sysUserService.insertUserRoles(tsysUser,"687205030654251008");
 		if(b>0){
 			return AjaxResult.success("注册成功");
@@ -147,9 +156,17 @@ public class GoViewController {
 	@ApiOperation(value = "获取oss信息", notes = "获取oss信息")
 	@GetMapping("/getOssInfo")
 	@ResponseBody
-	public AjaxResult OssInfo() {
+	public AjaxResult OssInfo(HttpServletRequest request) {
 		Map<String, String> ossinfo=new HashMap<String, String>();
-		ossinfo.put("bucketURL",template.getOssProperties().getEndpoint()+"/"+template.getOssProperties().getBucketName());
+		StringBuffer buffer=new StringBuffer("http://"+request.getServerName());
+		if(80!=request.getServerPort()) {
+			buffer.append(":"+request.getServerPort());
+		}
+		if(StrUtil.isNotEmpty(request.getContextPath())) {
+			buffer.append(""+request.getContextPath());
+		}
+		buffer.append("/oss/object/"+template.getOssProperties().getBucketName());
+		ossinfo.put("bucketURL",buffer.toString());
 		ossinfo.put("BucketName",template.getOssProperties().getBucketName());
 		return AjaxResult.successData(200, ossinfo).put("msg", "返回成功");
 		

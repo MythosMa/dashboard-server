@@ -22,7 +22,7 @@ fuce:
   #xss不拦截url
   xss-not-filter-url: [/api/v1/token/api_token,/api/v1/yibaotong/save]
   #satoken不拦截url
-  sa-token-not-filter-url: [/api/goview/*,/api/GoviewProject/*]
+  sa-token-not-filter-url: [/api/goview/sys/*,/api/GoviewProject/*]
 #tomcat config
 server :
   port : 8080

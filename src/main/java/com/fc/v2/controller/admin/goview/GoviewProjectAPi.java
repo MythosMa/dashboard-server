@@ -110,8 +110,15 @@ public class GoviewProjectAPi extends BaseController{
     @PutMapping("/updateVisible")
 	@ResponseBody
     public AjaxResult updateVisible(@RequestBody GoviewProject goviewProject){
-		int i=goviewProjectService.updateVisible(goviewProject);
-		return toAjax(i);
+    	if(goviewProject.getState()==-1||goviewProject.getState()==1) {
+    		GoviewProject goviewProject2=new GoviewProject();
+        	goviewProject2.setId(goviewProject.getId());
+        	goviewProject2.setState(goviewProject.getState());
+    		int i=goviewProjectService.updateVisible(goviewProject2);
+    		return toAjax(i);
+    	}
+    	return error("警告非法字段");
+		
 	}
 
     
