@@ -20,7 +20,7 @@ fuce:
   #漂亮得拖动验证码 默认false普通验证码、true滚动验证码
   roll-verification: false
   #xss不拦截url
-  xss-not-filter-url: [/api/v1/token/api_token,/api/v1/yibaotong/save]
+  xss-not-filter-url: [/api/v1/token/api_token,/api/goview/project/save/data]
   #satoken不拦截url
   sa-token-not-filter-url: [/api/goview/sys/*,/api/goview/project/**]
 #tomcat config

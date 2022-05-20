@@ -86,6 +86,11 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                 .setError(e -> {
                 	// e.printStackTrace();
                     if(e instanceof NotLoginException) {
+                    	for (String nourl : satoken_not_urls) {
+							if(nourl.contains(SaHolder.getRequest().getUrl())) {
+								 return JSON.toJSONString(AjaxResult.error(886,e.getMessage()));
+							}
+						}
                     	SaHolder.getResponse().redirect("/admin/login");
                     }
                     return JSON.toJSONString(AjaxResult.error(e.getMessage()));

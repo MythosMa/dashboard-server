@@ -6,7 +6,6 @@ import com.fc.v2.common.domain.ResultTable;
 import com.fc.v2.model.auto.GoviewProject;
 import com.fc.v2.model.auto.GoviewProjectData;
 import com.fc.v2.model.auto.GoviewProjectDataExample;
-import com.fc.v2.model.auto.GoviewProjectExample;
 import com.fc.v2.model.custom.Tablepar;
 import com.fc.v2.service.GoviewProjectDataService;
 import com.fc.v2.service.GoviewProjectService;
@@ -14,9 +13,7 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -171,7 +168,7 @@ public class GoviewProjectAPi extends BaseController{
 	@ApiOperation(value = "保存项目数据", notes = "保存项目数据")
 	@PostMapping("/save/data")
 	@ResponseBody
-	public AjaxResult saveData(@RequestBody GoviewProjectData data) {
+	public AjaxResult saveData(GoviewProjectData data) {
 		
 		GoviewProject goviewProject= goviewProjectService.selectByPrimaryKey(data.getProjectId());
 		if(goviewProject==null) {
