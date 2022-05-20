@@ -5,6 +5,8 @@ import com.fc.v2.common.domain.AjaxResult;
 import com.fc.v2.common.domain.ResultTable;
 import com.fc.v2.model.auto.GoviewProject;
 import com.fc.v2.model.auto.GoviewProjectData;
+import com.fc.v2.model.auto.GoviewProjectDataExample;
+import com.fc.v2.model.auto.GoviewProjectExample;
 import com.fc.v2.model.custom.Tablepar;
 import com.fc.v2.service.GoviewProjectDataService;
 import com.fc.v2.service.GoviewProjectService;
@@ -12,6 +14,9 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -163,6 +168,31 @@ public class GoviewProjectAPi extends BaseController{
 		return AjaxResult.error("获取失败");
         
     }
+	@ApiOperation(value = "保存项目数据", notes = "保存项目数据")
+	@PostMapping("/save/data")
+	@ResponseBody
+	public AjaxResult saveData(@RequestBody GoviewProjectData data) {
+		
+		GoviewProject goviewProject= goviewProjectService.selectByPrimaryKey(data.getProjectId());
+		if(goviewProject==null) {
+			return AjaxResult.error("没有该项目ID");
+		}
+		GoviewProjectDataExample dataExample=new GoviewProjectDataExample();
+		dataExample.createCriteria().andProjectIdEqualTo(goviewProject.getId());
+		List<GoviewProjectData> list= goviewProjectDataService.selectByExample(dataExample);
+		int i=0;
+		if(list!=null&&list.size()>0) {
+			GoviewProjectDataExample dataExample2=new GoviewProjectDataExample();
+			dataExample2.createCriteria().andProjectIdEqualTo(goviewProject.getId());
+			i=goviewProjectDataService.updateByExampleSelective(data, dataExample2);
+		}else {
+			i=goviewProjectDataService.insertSelective(data);
+		}
+		if(i>0) {
+			return AjaxResult.success("数据保存成功");
+		}
+		return AjaxResult.error("获取保存失败");
+	}
 
     
     
