@@ -1,9 +1,7 @@
 package com.fc.v2.service;
 
 import java.util.List;
-import java.util.Arrays;
 import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
@@ -17,7 +15,6 @@ import com.fc.v2.model.auto.GoviewProjectDataExample;
 import com.fc.v2.model.custom.Tablepar;
 import com.fc.v2.satoken.SaTokenUtil;
 import com.fc.v2.util.SnowflakeIdWorker;
-import com.fc.v2.util.StringUtils;
 
 /**
  * 项目数据关联表 GoviewProjectDataService
