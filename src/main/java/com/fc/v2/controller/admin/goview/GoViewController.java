@@ -12,13 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fc.v2.common.conf.oss.OssTemplate;
 import com.fc.v2.common.domain.AjaxResult;
-import com.fc.v2.common.log.Log;
-import com.fc.v2.controller.AdminController;
 import com.fc.v2.mapper.custom.TsysUserDao;
 import com.fc.v2.model.auto.TsysUser;
 import com.fc.v2.model.auto.TsysUserExample;
@@ -26,8 +23,6 @@ import com.fc.v2.satoken.SaTokenUtil;
 import com.fc.v2.service.SysUserService;
 import com.fc.v2.util.ServletUtils;
 import com.fc.v2.util.StringUtils;
-
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
@@ -37,7 +32,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/api/goview/sys")
 public class GoViewController {
 
-	private static Logger logger = LoggerFactory.getLogger(AdminController.class);
+	private static Logger logger = LoggerFactory.getLogger(GoViewController.class);
 	@Autowired
 	private TsysUserDao tsysUserDao;
 	@Autowired
@@ -96,7 +91,11 @@ public class GoViewController {
 			} else {
 				if (StringUtils.isNotNull(SaTokenUtil.getUser())) {
 					// 跳转到 get请求的登陆方法
-					return AjaxResult.successData(200,  StpUtil.getTokenInfo()).put("msg","登录成功"); 
+					
+					Map<String, Object> map=new HashMap<String, Object>();
+					map.put("token",StpUtil.getTokenInfo());
+					map.put("userinfo", SaTokenUtil.getUser());
+					return AjaxResult.success().put("data",map);
 				} else {
 					return AjaxResult.error(500, "未知账户");
 				}
