@@ -51,7 +51,9 @@ public class GoviewProjectAPi extends BaseController{
 	@ResponseBody
 	public ResultTable list(Tablepar tablepar,GoviewProject goviewProject){
 		PageInfo<GoviewProject> page=goviewProjectService.list(tablepar,goviewProject) ; 
-		return pageTable(page.getList(),page.getTotal());
+		ResultTable resultTable=  pageTable(page.getList(),page.getTotal());
+		resultTable.setCode(200);
+		return resultTable;
 	}
 	
 	
