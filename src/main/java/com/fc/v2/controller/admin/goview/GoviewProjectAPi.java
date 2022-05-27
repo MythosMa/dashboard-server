@@ -6,9 +6,11 @@ import com.fc.v2.common.domain.ResultTable;
 import com.fc.v2.model.auto.GoviewProject;
 import com.fc.v2.model.auto.GoviewProjectData;
 import com.fc.v2.model.auto.GoviewProjectDataExample;
+import com.fc.v2.model.custom.GoviewProjectVo;
 import com.fc.v2.model.custom.Tablepar;
 import com.fc.v2.service.GoviewProjectDataService;
 import com.fc.v2.service.GoviewProjectService;
+import com.fc.v2.util.BeanUtils;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -156,15 +158,20 @@ public class GoviewProjectAPi extends BaseController{
 	 * @return
 	 */
 	@ApiOperation(value = "获取项目存储数据", notes = "获取项目存储数据")
-	@GetMapping("/getData/{id}")
+	@GetMapping("/getData")
 	@ResponseBody
-    public AjaxResult getData(@PathVariable("id") String id, ModelMap map)
+    public AjaxResult getData(String projectId, ModelMap map)
     {
-		GoviewProjectData blogText=goviewProjectDataService.selectByPrimaryKey(id);
+		GoviewProject goviewProject= goviewProjectService.selectByPrimaryKey(projectId);
+		
+		GoviewProjectData blogText=goviewProjectDataService.getProjectid(projectId);
 		if(blogText!=null) {
-			return AjaxResult.successData(200, blogText.getDataToStr()).put("msg","获取成功");
+			GoviewProjectVo goviewProjectVo=new GoviewProjectVo();
+			BeanUtils.copyBeanProp(goviewProjectVo, goviewProject);
+			goviewProjectVo.setContent(blogText.getDataToStr());
+			return AjaxResult.successData(200,goviewProjectVo).put("msg","获取成功");
 		}
-		return AjaxResult.error("获取失败");
+		return AjaxResult.successData(200, null).put("msg","无数据");
         
     }
 	@ApiOperation(value = "保存项目数据", notes = "保存项目数据")

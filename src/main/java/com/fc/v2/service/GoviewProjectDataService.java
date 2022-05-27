@@ -136,6 +136,26 @@ public class GoviewProjectDataService implements BaseService<GoviewProjectData, 
 	public int updateVisible(GoviewProjectData goviewProjectData) {
 		return goviewProjectDataMapper.updateByPrimaryKeySelective(goviewProjectData);
 	}
-
+	
+	
+	/**
+	 * 根据项目id查询项目数据
+	 * @Title: getProjectid
+	 * @author fuce
+	 * @date 2022年5月24日
+	 * @param @param projectId
+	 * @param @return 参数
+	 * @return GoviewProjectData 返回类型
+	 * @throws
+	 */
+	public GoviewProjectData getProjectid(String projectId) {
+		GoviewProjectDataExample example=new GoviewProjectDataExample();
+		example.createCriteria().andProjectIdEqualTo(projectId);
+		List<GoviewProjectData> list= goviewProjectDataMapper.selectByExampleWithBLOBs(example);
+		if(list!=null&&list.size()>0) {
+			return list.get(0);
+		}
+		return null;
+	} 
 
 }

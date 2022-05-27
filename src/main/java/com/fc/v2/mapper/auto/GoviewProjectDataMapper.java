@@ -34,5 +34,7 @@ public interface GoviewProjectDataMapper {
     int updateByPrimaryKeySelective(GoviewProjectData record);
 
     int updateByPrimaryKey(GoviewProjectData record);
+    
+    List<GoviewProjectData> selectByExampleWithBLOBs(GoviewProjectDataExample example);
   	  	
 }

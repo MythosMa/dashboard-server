@@ -137,5 +137,19 @@ public class GlobalExceptionResolver{
     	logger.error("运行时异常:", e);
         return AjaxResult.error("运行时异常:" + e.getMessage());
     }
+    
+    public static void main(String[] args) {
+		
+    	String[] str={"/api/goview/sys/*","/api/goview/project/*","/api/goview/project/**","/goview/api/goview/project/list"};
+    	System.out.println("3333");
+		for (String nourl : str) {
+			 AntPathMatcher matcher = new AntPathMatcher();
+			if(matcher.match(nourl,"/goview/api/goview/project/list")) {
+				System.out.println("xxxxxxxxxx");
+			}
+		}
+    	
+    	
+	}
 
 }
