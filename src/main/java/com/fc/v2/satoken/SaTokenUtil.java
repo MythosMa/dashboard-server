@@ -50,7 +50,17 @@ public class SaTokenUtil {
      * @Date 2019年11月21日 上午9:58:26
      */
     public static String getIp() {
+    	
         return StpUtil.getTokenSession().getString("login_ip");
+    }
+    /**
+     * 判断是否登录
+     * @return
+     * @author fuce
+     * @Date 2019年11月21日 上午9:58:26
+     */
+    public static boolean isLogin() {
+        return StpUtil.isLogin();
     }
     
 }

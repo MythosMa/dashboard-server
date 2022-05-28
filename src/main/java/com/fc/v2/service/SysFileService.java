@@ -116,6 +116,18 @@ public class SysFileService implements BaseService<SysFile, SysFileExample> {
     public List<SysFile> selectByExample(SysFileExample example) {
         return sysFileMapper.selectByExample(example);
     }
+    
+   
+    public SysFile selectByExamplefileName(String filename) {
+    	SysFileExample example=new SysFileExample();
+    	example.createCriteria().andFileNameEqualTo(filename);
+    	List<SysFile> sysFiles=sysFileMapper.selectByExample(example);
+    	if(sysFiles!=null&&sysFiles.size()>0) {
+    		return sysFiles.get(0);
+    	}
+        return null;
+    }
+    
 
     @Override
     public long countByExample(SysFileExample example) {

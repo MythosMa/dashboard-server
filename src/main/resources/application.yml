@@ -27,8 +27,8 @@ fuce:
 server :
   port : 8080
   ##项目名字配置
-  #servlet :
-  #  context-path : /demo
+  servlet :
+    context-path : /goview
   tomcat :
     uri-encoding : UTF-8
     #xx 报错修改的地方
