@@ -107,7 +107,7 @@ public class OssEndpoint {
 		String fileSuffixName="";
 		if(fileName.lastIndexOf(".")!=-1) {//有后缀
 			 suffixName = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
-			 mediaKey=MD5.create().digestHex(fileSuffixName);
+			 mediaKey=MD5.create().digestHex(fileName);
 			 fileSuffixName=mediaKey+suffixName;
 		}else {//无后缀
 			//取得唯一id
@@ -275,6 +275,11 @@ public class OssEndpoint {
 		retmap.put("code",500);
 		retmap.put("msg","上传失败!");
 		return retmap;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(MD5.create().digestHex("690064647340036096_index_preview.png"));
+		System.out.println(MD5.create().digestHex("686921460203261952_index_preview.png"));
 	}
 
 }
