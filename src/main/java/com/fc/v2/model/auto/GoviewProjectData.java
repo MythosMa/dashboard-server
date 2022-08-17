@@ -104,11 +104,13 @@ public class GoviewProjectData implements Serializable {
 	public String getDataToStr() {
 		byte[] bs= getContent();
 		String str="二进制转换错误";
-		try {
+		/*try {
 			str = new String(bs, "utf-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+*/
+		str = new String(bs);
 		return str;
 	}
 	
