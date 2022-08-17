@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fc.v2.common.base.BaseController;
@@ -176,6 +173,7 @@ public class AdminController extends BaseController {
 	@ApiOperation(value = "手机登录", notes = "手机登录")
 	@PostMapping("/API/login")
 	@ResponseBody
+	@CrossOrigin
 	public AjaxResult APIlogin(TsysUser user,boolean rememberMe,HttpServletRequest request) {
 		// ModelAndView view =new ModelAndView();
 		Boolean yz = true;
