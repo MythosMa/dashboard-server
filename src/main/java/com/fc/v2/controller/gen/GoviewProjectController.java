@@ -25,6 +25,7 @@ import com.fc.v2.common.conf.oss.OssConfig;
 @Api(value = "项目表")
 @Controller
 @RequestMapping("/GoviewProjectController")
+@CrossOrigin
 public class GoviewProjectController extends BaseController{
 	
 	private String prefix = "gen/goviewProject";

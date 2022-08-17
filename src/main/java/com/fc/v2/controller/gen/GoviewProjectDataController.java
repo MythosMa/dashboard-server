@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = "项目数据关联表")
 @Controller
 @RequestMapping("/GoviewProjectDataController")
+@CrossOrigin
 public class GoviewProjectDataController extends BaseController{
 	
 	private String prefix = "gen/goviewProjectData";
