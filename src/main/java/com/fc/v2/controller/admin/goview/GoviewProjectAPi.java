@@ -219,37 +219,59 @@ public class GoviewProjectAPi extends BaseController{
 	@ResponseBody
     public AjaxResult magicHttp(@RequestBody MagicHttp magicHttp){
     	if(magicHttp!=null){
-    		logger.info("后台接收前端模拟提交数据:"+JSONUtil.toJsonStr(magicHttp));
-    		if(magicHttp.getRequestType().toUpperCase().equals("GET")){
-    			HttpRequest  httpRequest=HttpUtil.createGet(magicHttp.getUrl());
-    			if(magicHttp.getHead()!=null&&magicHttp.getHead().size()>0){
-    				httpRequest.addHeaders(magicHttp.getHead());
-    			}
-    			if(StrUtil.isNotBlank(magicHttp.getCookie())){
-    				httpRequest.cookie(magicHttp.getCookie());
-    			}
-    			httpRequest.timeout(magicHttp.getTimeout());
-    			String body= httpRequest.setFollowRedirects(true).execute().body();
-    			return AjaxResult.successData(200,body);
-    		}
-    		if(magicHttp.getRequestType().toUpperCase().equals("POST")){
+    		try {
+    			logger.info("后台接收前端模拟提交数据:"+JSONUtil.toJsonStr(magicHttp));
+        		if(magicHttp.getRequestType().toUpperCase().equals("GET")){
+        			HttpRequest  httpRequest=HttpUtil.createGet(magicHttp.getUrl());
+        			if(magicHttp.getHead()!=null&&magicHttp.getHead().size()>0){
+        				httpRequest.addHeaders(magicHttp.getHead());
+        			}
+        			if(StrUtil.isNotBlank(magicHttp.getCookie())){
+        				httpRequest.cookie(magicHttp.getCookie());
+        			}
+        			if(StrUtil.isNotBlank(magicHttp.getBody())){
+        				httpRequest.body(magicHttp.getBody());
+        			}
+        			if(magicHttp.getTimeout()!=null){
+        				httpRequest.timeout(magicHttp.getTimeout());
+        			}
+        			if(magicHttp.getTimeout()==null){
+        				httpRequest.timeout(30000);
+        			}
+        			
+        			String body= httpRequest.setFollowRedirects(true).execute().body();
+        			return AjaxResult.successData(200,body);
+        		}
+        		if(magicHttp.getRequestType().toUpperCase().equals("POST")){
 
-    			HttpRequest  httpRequest=HttpUtil.createPost(magicHttp.getUrl());
-    			if(magicHttp.getHead()!=null&&magicHttp.getHead().size()>0){
-    				httpRequest.addHeaders(magicHttp.getHead());
-    			}
-    			if(StrUtil.isNotBlank(magicHttp.getCookie())){
-    				httpRequest.cookie(magicHttp.getCookie());
-    			}
-    			httpRequest.timeout(magicHttp.getTimeout());
-    	    	if(magicHttp.getForm()!=null&&magicHttp.getForm().size()>0){
-    	    		httpRequest.form(magicHttp.getForm());
-    	    	}
-    	    	String body=httpRequest.setFollowRedirects(true).execute().body();
-    			return AjaxResult.successData(200,body);
-    		}
+        			HttpRequest  httpRequest=HttpUtil.createPost(magicHttp.getUrl());
+        			if(magicHttp.getHead()!=null&&magicHttp.getHead().size()>0){
+        				httpRequest.addHeaders(magicHttp.getHead());
+        			}
+        			if(StrUtil.isNotBlank(magicHttp.getCookie())){
+        				httpRequest.cookie(magicHttp.getCookie());
+        			}
+        			if(StrUtil.isNotBlank(magicHttp.getBody())){
+        				httpRequest.body(magicHttp.getBody());
+        			}
+        			if(magicHttp.getTimeout()!=null){
+        				httpRequest.timeout(magicHttp.getTimeout());
+        			}
+        			if(magicHttp.getTimeout()==null){
+        				httpRequest.timeout(30000);
+        			}
+        	    	if(magicHttp.getForm()!=null&&magicHttp.getForm().size()>0){
+        	    		httpRequest.form(magicHttp.getForm());
+        	    	}
+        	    	String body=httpRequest.setFollowRedirects(true).execute().body();
+        			return AjaxResult.successData(200,body);
+        		}
+			} catch (Exception e) {
+				return AjaxResult.successNullData("参数异常"+e.getMessage());
+			}
+    		
     	}
-    	return AjaxResult.error();
+    	return AjaxResult.successNullData("参数异常为null");
     }
     
 
