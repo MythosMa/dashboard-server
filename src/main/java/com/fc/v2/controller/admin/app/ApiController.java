@@ -18,5 +18,15 @@ public class ApiController {
 		return map;
 		
 	}
+	@GetMapping("/test2")
+	public Object test2(String str) {
+		System.out.println(str);
+		Map<String, String> map=new HashMap<String, String>();
+		map.put("a", "1");
+		map.put("b", "2");
+		map.put("c", "3");
+		return map;
+		
+	}
 
 }

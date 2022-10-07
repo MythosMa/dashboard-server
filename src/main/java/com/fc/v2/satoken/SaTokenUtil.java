@@ -1,6 +1,7 @@
 package com.fc.v2.satoken;
 
 import com.fc.v2.model.auto.TsysUser;
+import com.fc.v2.util.BeanUtils;
 
 import cn.dev33.satoken.stp.StpUtil;
 
@@ -15,7 +16,13 @@ public class SaTokenUtil {
      * 获取登录用户model
      */
     public static TsysUser getUser() {
-    	return (TsysUser)StpUtil.getSession().get("user");
+    	Object object=StpUtil.getSession().get("user");
+    	if(object!=null){
+    		TsysUser tsysUser=new TsysUser();
+    		BeanUtils.copyBeanProp(tsysUser, object);
+    		return tsysUser;
+    	}
+    	return null;
     }
     
     /**

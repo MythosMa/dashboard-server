@@ -95,6 +95,7 @@ public class GoViewController {
 					Map<String, Object> map=new HashMap<String, Object>();
 					map.put("token",StpUtil.getTokenInfo());
 					map.put("userinfo", SaTokenUtil.getUser());
+					
 					return AjaxResult.success().put("data",map);
 				} else {
 					return AjaxResult.error(500, "未知账户");
@@ -165,6 +166,7 @@ public class GoViewController {
 			buffer.append(""+request.getContextPath());
 		}
 		buffer.append("/oss/object/"+template.getOssProperties().getBucketName());
+		
 		ossinfo.put("bucketURL",buffer.toString());
 		ossinfo.put("BucketName",template.getOssProperties().getBucketName());
 		return AjaxResult.successData(200, ossinfo).put("msg", "返回成功");

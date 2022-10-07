@@ -7,6 +7,7 @@ import com.fc.v2.model.auto.GoviewProject;
 import com.fc.v2.model.auto.GoviewProjectData;
 import com.fc.v2.model.auto.GoviewProjectDataExample;
 import com.fc.v2.model.custom.GoviewProjectVo;
+import com.fc.v2.model.custom.MagicHttp;
 import com.fc.v2.model.custom.Tablepar;
 import com.fc.v2.service.GoviewProjectDataService;
 import com.fc.v2.service.GoviewProjectService;
@@ -15,7 +16,16 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONUtil;
+
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -31,7 +41,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/api/goview/project")
 public class GoviewProjectAPi extends BaseController{
-	
+	private static Logger logger = LoggerFactory.getLogger(GoviewProjectAPi.class);
 	
 	@Autowired
 	private GoviewProjectService goviewProjectService;
@@ -199,8 +209,48 @@ public class GoviewProjectAPi extends BaseController{
 		}
 		return AjaxResult.error("获取保存失败");
 	}
+	
+	/**
+	 * 模拟请求
+	 * @return
+	 */
+	@ApiOperation(value = "模拟请求", notes = "模拟请求")
+	@PostMapping("/magicHttp")
+	@ResponseBody
+    public AjaxResult magicHttp(@RequestBody MagicHttp magicHttp){
+    	if(magicHttp!=null){
+    		logger.info("后台接收前端模拟提交数据:"+JSONUtil.toJsonStr(magicHttp));
+    		if(magicHttp.getRequestType().toUpperCase().equals("GET")){
+    			HttpRequest  httpRequest=HttpUtil.createGet(magicHttp.getUrl());
+    			if(magicHttp.getHead()!=null&&magicHttp.getHead().size()>0){
+    				httpRequest.addHeaders(magicHttp.getHead());
+    			}
+    			if(StrUtil.isNotBlank(magicHttp.getCookie())){
+    				httpRequest.cookie(magicHttp.getCookie());
+    			}
+    			httpRequest.timeout(magicHttp.getTimeout());
+    			String body= httpRequest.setFollowRedirects(true).execute().body();
+    			return AjaxResult.successData(200,body);
+    		}
+    		if(magicHttp.getRequestType().toUpperCase().equals("POST")){
 
-    
+    			HttpRequest  httpRequest=HttpUtil.createPost(magicHttp.getUrl());
+    			if(magicHttp.getHead()!=null&&magicHttp.getHead().size()>0){
+    				httpRequest.addHeaders(magicHttp.getHead());
+    			}
+    			if(StrUtil.isNotBlank(magicHttp.getCookie())){
+    				httpRequest.cookie(magicHttp.getCookie());
+    			}
+    			httpRequest.timeout(magicHttp.getTimeout());
+    	    	if(magicHttp.getForm()!=null&&magicHttp.getForm().size()>0){
+    	    		httpRequest.form(magicHttp.getForm());
+    	    	}
+    	    	String body=httpRequest.setFollowRedirects(true).execute().body();
+    			return AjaxResult.successData(200,body);
+    		}
+    	}
+    	return AjaxResult.error();
+    }
     
 
 	

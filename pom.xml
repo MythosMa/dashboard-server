@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>com.fc</groupId>
-    <artifactId>v2</artifactId>
+    <artifactId>goview_v2</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>goview_v2</name>
 	<packaging>war</packaging>
