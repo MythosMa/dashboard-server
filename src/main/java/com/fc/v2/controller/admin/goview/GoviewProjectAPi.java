@@ -1,6 +1,5 @@
 package com.fc.v2.controller.admin.goview;
 
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.fc.v2.common.base.BaseController;
 import com.fc.v2.common.conf.V2Config;
 import com.fc.v2.common.domain.AjaxResult;
@@ -12,7 +11,6 @@ import com.fc.v2.model.auto.SysFile;
 import com.fc.v2.model.custom.GoviewProjectVo;
 import com.fc.v2.model.custom.MagicHttp;
 import com.fc.v2.model.custom.Tablepar;
-import com.fc.v2.satoken.SaTokenUtil;
 import com.fc.v2.service.GoviewProjectDataService;
 import com.fc.v2.service.GoviewProjectService;
 import com.fc.v2.service.SysFileService;
@@ -25,16 +23,12 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
-import cn.hutool.http.server.HttpServerRequest;
 import cn.hutool.json.JSONUtil;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +46,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Api(value = "前端项目表")
 @Controller
 @RequestMapping("/api/goview/project")
+@CrossOrigin
 public class GoviewProjectAPi extends BaseController{
 	private static Logger logger = LoggerFactory.getLogger(GoviewProjectAPi.class);
 	
