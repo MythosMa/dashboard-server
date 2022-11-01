@@ -60,7 +60,7 @@ public class GlobalExceptionResolver{
 						 return JSON.toJSONString(AjaxResult.error(886,e.getMessage()));
 					}
 				}
-        		return new ModelAndView("/login");
+        		return new ModelAndView("login");
         	} 
         	// 权限认证异常 
         	else if (e instanceof NotPermissionException || e instanceof NotRoleException || e instanceof NotSafeException){

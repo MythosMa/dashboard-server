@@ -91,7 +91,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
 								 return JSON.toJSONString(AjaxResult.error(886,e.getMessage()));
 							}
 						}
-                    	SaHolder.getResponse().redirect("/admin/login");
+                    	SaHolder.getRequest().forward("/admin/login");
                     }
                     return JSON.toJSONString(AjaxResult.error(e.getMessage()));
                 })

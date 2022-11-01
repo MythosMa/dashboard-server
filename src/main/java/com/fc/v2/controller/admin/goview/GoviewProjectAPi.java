@@ -1,27 +1,38 @@
 package com.fc.v2.controller.admin.goview;
 
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.fc.v2.common.base.BaseController;
+import com.fc.v2.common.conf.V2Config;
 import com.fc.v2.common.domain.AjaxResult;
 import com.fc.v2.common.domain.ResultTable;
 import com.fc.v2.model.auto.GoviewProject;
 import com.fc.v2.model.auto.GoviewProjectData;
 import com.fc.v2.model.auto.GoviewProjectDataExample;
+import com.fc.v2.model.auto.SysFile;
 import com.fc.v2.model.custom.GoviewProjectVo;
 import com.fc.v2.model.custom.MagicHttp;
 import com.fc.v2.model.custom.Tablepar;
+import com.fc.v2.satoken.SaTokenUtil;
 import com.fc.v2.service.GoviewProjectDataService;
 import com.fc.v2.service.GoviewProjectService;
+import com.fc.v2.service.SysFileService;
 import com.fc.v2.util.BeanUtils;
+import com.fc.v2.util.SnowflakeIdWorker;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.MD5;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.http.server.HttpServerRequest;
 import cn.hutool.json.JSONUtil;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -30,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 项目表Controller
@@ -47,8 +59,10 @@ public class GoviewProjectAPi extends BaseController{
 	private GoviewProjectService goviewProjectService;
 	@Autowired
 	private GoviewProjectDataService goviewProjectDataService;
-	
-	
+	@Autowired
+	private SysFileService sysFileService;
+	@Autowired
+	private V2Config v2Config;
 	
 	/**
 	 * list集合
@@ -274,6 +288,60 @@ public class GoviewProjectAPi extends BaseController{
     	return AjaxResult.successNullData("参数异常为null");
     }
     
+	
+	
+	/**
+	 * 上传文件
+	 * @param object 文件流对象
+	 * @param bucketName 桶名
+	 * @return
+	 * @throws Exception
+	 */
+	@PostMapping("/upload")
+	@ResponseBody
+	public AjaxResult upload(@RequestBody MultipartFile object) throws IOException{
+		String fileName = object.getOriginalFilename();
+		String suffixName=".png";
+		String mediaKey="";
+		//文件名字
+		String fileSuffixName="";
+		if(fileName.lastIndexOf(".")!=-1) {//有后缀
+			 suffixName = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+			 mediaKey=MD5.create().digestHex(fileName);
+			 fileSuffixName=mediaKey+suffixName;
+		}else {//无后缀
+			//取得唯一id
+			 mediaKey = MD5.create().digestHex(fileName+suffixName);
+			 fileSuffixName=mediaKey+suffixName;
+		}
+		SysFile sysFile=sysFileService.selectByExamplefileName(fileSuffixName);
+		
+		 File desc = getAbsoluteFile(v2Config.getDefaultBaseDir(),fileSuffixName);
+		 object.transferTo(desc);
+		if(sysFile!=null){//修改
+		}else{
+			sysFile=new SysFile(SnowflakeIdWorker.getUUID(),  fileSuffixName, null, object.getSize(), object.getContentType(),"-", "-", new Date(),null, null, null);
+			sysFileService.insertSelective(sysFile);
+		}
+		
+		return AjaxResult.successData(200, sysFile);
+		
+	}
+	
+	
+	private  final File getAbsoluteFile(String uploadDir, String filename) throws IOException
+    {
+        File desc = new File(uploadDir+File.separator + filename);
 
+        if (!desc.getParentFile().exists())
+        {
+            desc.getParentFile().mkdirs();
+        }
+        if (!desc.exists())
+        {
+            desc.createNewFile();
+        }
+        return desc;
+    }
 	
 }

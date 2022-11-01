@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fc.v2.common.conf.V2Config;
 import com.fc.v2.common.conf.oss.OssTemplate;
 import com.fc.v2.common.domain.AjaxResult;
 import com.fc.v2.mapper.custom.TsysUserDao;
@@ -41,6 +43,8 @@ public class GoViewController {
 	//系统用户
 	@Autowired
 	public SysUserService sysUserService; 
+	@Autowired
+	private V2Config v2Config;
 		
 	/**
 	 * 手机登录
@@ -158,17 +162,7 @@ public class GoViewController {
 	@ResponseBody
 	public AjaxResult OssInfo(HttpServletRequest request) {
 		Map<String, String> ossinfo=new HashMap<String, String>();
-		StringBuffer buffer=new StringBuffer("http://"+request.getServerName());
-		if(80!=request.getServerPort()) {
-			buffer.append(":"+request.getServerPort());
-		}
-		if(StrUtil.isNotEmpty(request.getContextPath())) {
-			buffer.append(""+request.getContextPath());
-		}
-		buffer.append("/oss/object/"+template.getOssProperties().getBucketName());
-		
-		ossinfo.put("bucketURL",buffer.toString());
-		ossinfo.put("BucketName",template.getOssProperties().getBucketName());
+		ossinfo.put("bucketURL",v2Config.getUploadImgUrl());
 		return AjaxResult.successData(200, ossinfo).put("msg", "返回成功");
 		
 	}

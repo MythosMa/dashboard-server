@@ -37,6 +37,10 @@ public class V2Config
     /** shiro不拦截url配置 **/
     private List<String> saTokenNotFilterUrl;
     
+    private String defaultBaseDir;
+    /**图片请求地址**/
+    private String uploadImgUrl;
+    
 	public String getName() {
 		return name;
 	}
@@ -102,6 +106,18 @@ public class V2Config
 	}
 	public void setSaTokenNotFilterUrl(List<String> saTokenNotFilterUrl) {
 		this.saTokenNotFilterUrl = saTokenNotFilterUrl;
+	}
+	public String getDefaultBaseDir() {
+		return defaultBaseDir;
+	}
+	public void setDefaultBaseDir(String defaultBaseDir) {
+		this.defaultBaseDir = defaultBaseDir;
+	}
+	public String getUploadImgUrl() {
+		return uploadImgUrl;
+	}
+	public void setUploadImgUrl(String uploadImgUrl) {
+		this.uploadImgUrl = uploadImgUrl;
 	}
 
 }
