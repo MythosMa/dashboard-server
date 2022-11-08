@@ -27,7 +27,7 @@ fuce:
   #文件上传的存放的地址
   default-base-dir: D:/v2file
   #前端请求文件上传的url配置
-  upload_img_url: http://localhost:8080/goview//static/file_upload/
+  upload_img_url: http://localhost:8080/static/file_upload/
 #tomcat config
 server :
   port : 8080
