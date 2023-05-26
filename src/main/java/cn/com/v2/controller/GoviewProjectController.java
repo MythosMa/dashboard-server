@@ -197,6 +197,7 @@ public class GoviewProjectController  extends BaseController{
 		}
 		GoviewProjectData goviewProjectData= iGoviewProjectDataService.getOne(new LambdaQueryWrapper<GoviewProjectData>().eq(GoviewProjectData::getProjectId, goviewProject.getId()));
 		if(goviewProjectData!=null) {
+			 data.setId(goviewProjectData.getId());
 			 iGoviewProjectDataService.updateById(data);
 			 return success("数据保存成功");
 		}else {
