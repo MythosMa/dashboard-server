@@ -9,7 +9,7 @@ spring:
     password: 
     ### 连接池配置
     druid:
-      initial-size: 2
+      initial-size: 10
       max-active: 100
       min-idle: 30
       max-wait: 40
