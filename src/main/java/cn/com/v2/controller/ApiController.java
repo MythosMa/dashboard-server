@@ -42,7 +42,7 @@ public class ApiController  extends BaseController {
 			return success().put("data", map);
 		} else {
 			if (StrUtil.isNotBlank(user.getUsername()) && StrUtil.isNotBlank(user.getPassword())) {
-				SysUser sysUser = iSysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, user.getUsername()).eq(SysUser::getPassword, SecureUtil.md5(user.getUsername())).last("LIMIT 1"));
+				SysUser sysUser = iSysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, user.getUsername()).eq(SysUser::getPassword, SecureUtil.md5(user.getPassword())).last("LIMIT 1"));
 				if (sysUser != null) {
 					StpUtil.login(sysUser.getId());
 					SaTokenUtil.setUser(sysUser);
